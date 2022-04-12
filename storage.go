@@ -17,10 +17,6 @@ func SetPostgresConfig(username, password, database string) {
 	PostgresPassword = password
 	PostgresDatabase = database
 	Database = "postgres"
-	err := postgresInitDatabase()
-	if err != nil {
-		log.Panicln(err)
-	}
 }
 
 func SetRedisConfig(database int, password, name string) {

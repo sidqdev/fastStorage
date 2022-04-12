@@ -90,21 +90,6 @@ func postgresSetStage(chat_id, user_id int64, stage string) error {
 	return nil
 }
 
-func postgresInitDatabase() error {
-	conn, err := postgresConnection()
-	if err != nil {
-		return err
-	}
-	defer conn.Close()
-	_, err = conn.Exec(
-		"CREATE TABLE IF NOT EXISTS storage_data " +
-			"(chat_id INT, " +
-			"user_id INT,  " +
-			"json_data TEXT, " +
-			"stage TEXT)")
-	return err
-}
-
 func postgresConnection() (*pgx.Conn, error) {
 	conn, err := pgx.Connect(pgx.ConnConfig{
 		Host:     "localhost",

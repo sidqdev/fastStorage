@@ -102,7 +102,6 @@ func postgresInitDatabase() error {
 			"chat_id INT" +
 			"json_data TEXT" +
 			"stage TEXT)")
-
 	return err
 }
 

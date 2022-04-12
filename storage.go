@@ -19,7 +19,7 @@ func SetPostgresConfig(username, password, database string) {
 	Database = "postgres"
 	err := postgresInitDatabase()
 	if err != nil {
-		log.Println(err)
+		log.Panicln(err)
 	}
 }
 

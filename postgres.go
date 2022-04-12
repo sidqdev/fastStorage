@@ -99,7 +99,7 @@ func postgresInitDatabase() error {
 	_, err = conn.Exec(
 		"CREATE TABLE IF NOT EXISTS storage_data " +
 			"(chat_id INT " +
-			"chat_id INT " +
+			"user_id INT " +
 			"json_data TEXT " +
 			"stage TEXT)")
 	return err

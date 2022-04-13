@@ -1,5 +1,7 @@
 package storage
 
+import "errors"
+
 func setData(chat_id, user_id int64, json_data string) error {
 	switch Database {
 	case "postgres":
@@ -7,7 +9,7 @@ func setData(chat_id, user_id int64, json_data string) error {
 	case "redis":
 		return redisSetData(chat_id, user_id, json_data)
 	}
-	return nil
+	return errors.New("undefind database")
 }
 
 func getData(chat_id, user_id int64) (string, error) {
@@ -17,7 +19,7 @@ func getData(chat_id, user_id int64) (string, error) {
 	case "redis":
 		return redisGetData(chat_id, user_id)
 	}
-	return "", nil
+	return "", errors.New("undefind database")
 }
 
 func setStage(chat_id, user_id int64, stage string) error {
@@ -27,7 +29,7 @@ func setStage(chat_id, user_id int64, stage string) error {
 	case "redis":
 		return redisSetStage(chat_id, user_id, stage)
 	}
-	return nil
+	return errors.New("undefind database")
 }
 
 func getStage(chat_id, user_id int64) (string, error) {
@@ -37,6 +39,6 @@ func getStage(chat_id, user_id int64) (string, error) {
 	case "redis":
 		return redisGetStage(chat_id, user_id)
 	}
-	return "", nil
+	return "", errors.New("undefind database")
 
 }

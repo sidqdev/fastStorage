@@ -1,7 +1,6 @@
 package storage
 
 import (
-	"errors"
 	"log"
 
 	"github.com/jackc/pgx"
@@ -18,7 +17,7 @@ func postgresSetData(chat_id, user_id int64, json_data string) error {
 	err = conn.QueryRow("SELECT COUNT(*) FROM storage_data WHERE chat_id = $1 AND user_id = $2", chat_id, user_id).Scan(&record)
 	if err != nil && err != pgx.ErrNoRows {
 		log.Println("Can not select row from database")
-		return errors.New("can not select row from database")
+		return err
 	}
 	if record == 0 {
 		_, err = conn.Exec("INSERT INTO storage_data(chat_id, user_id, json_data, stage) VALUES($1, $2, $3, NULL)", chat_id, user_id, json_data)
@@ -27,7 +26,7 @@ func postgresSetData(chat_id, user_id int64, json_data string) error {
 	}
 	if err != nil {
 		log.Println("Can not select row from database")
-		return errors.New("can not select row from database")
+		return err
 	}
 
 	return nil
@@ -43,7 +42,7 @@ func postgresGetData(chat_id, user_id int64) (string, error) {
 	err = conn.QueryRow("SELECT json_data FROM storage_data WHERE chat_id = $1 AND user_id = $2", chat_id, user_id).Scan(&json_data)
 	if err != nil {
 		log.Println("Can not select row from database")
-		return "", errors.New("can not select row from database")
+		return "", err
 	}
 	return json_data, nil
 }
@@ -58,7 +57,7 @@ func postgresGetStage(chat_id, user_id int64) (string, error) {
 	err = conn.QueryRow("SELECT stage FROM storage_data WHERE chat_id = $1 AND user_id = $2", chat_id, user_id).Scan(&stage)
 	if err != nil && err != pgx.ErrNoRows {
 		log.Println(err)
-		return "", errors.New("can not select row from database")
+		return "", err
 	}
 	return stage, nil
 
@@ -75,7 +74,7 @@ func postgresSetStage(chat_id, user_id int64, stage string) error {
 	err = conn.QueryRow("SELECT COUNT(*) FROM storage_data WHERE chat_id = $1 AND user_id = $2", chat_id, user_id).Scan(&record)
 	if err != nil {
 		log.Println("Can not select row from database")
-		return errors.New("can not select row from database")
+		return err
 	}
 	if record == 0 {
 		_, err = conn.Exec("INSERT INTO storage_data(chat_id, user_id, json_data, stage) VALUES($1, $2, NULL, $3)", chat_id, user_id, stage)
@@ -84,7 +83,7 @@ func postgresSetStage(chat_id, user_id int64, stage string) error {
 	}
 	if err != nil {
 		log.Println("Can not select row from database")
-		return errors.New("can not select row from database")
+		return err
 	}
 
 	return nil
@@ -99,7 +98,7 @@ func postgresConnection() (*pgx.Conn, error) {
 		Database: PostgresDatabase})
 	if err != nil {
 		log.Printf("Unable to connect to database: %v\n", err)
-		return nil, errors.New("no connection to database")
+		return nil, err
 	}
 
 	return conn, nil
